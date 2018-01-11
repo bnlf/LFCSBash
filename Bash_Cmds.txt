@@ -1,0 +1,43 @@
+# Move line 90 to line 100 saving the output to a new file
+sed '90{h;d}; 100G' lines.txt > lines.txt_new
+
+# Append string to the end of the file
+echo line101 >> lines.txt_new
+
+# Copy differences between files of two dirs to third dir
+cp $(diff -r docs docs2 | grep docs | awk '{print $4}') diff/
+
+# Replace string with another string
+sed -i s/456/123/ test.txt
+
+# Find pdfs in a folder and copy them to another folder
+find /usr/share/doc -name '*.pdf' -type f -exec cp {} . \;
+
+# Find files with size +100k and copy them to another folder
+find /usr/share/doc -size +100k -type f -exec cp {} . \;
+
+# Compress a directory preserving permissions in a xz format
+tar cfpJ archive.tar.xz ./docs
+
+# Get default gateway
+IP=$(/sbin/ip route | awk '/default/ { print $3 }')
+echo $IP
+
+# Get username
+echo "$(id -u -n)"
+
+# Redirect Stdin(0), Stdout(1), Stderr(2) to a file
+$ program-name 2> error.log
+
+# Redirect Stdout(1) and Stderr (2) to a file
+$ program-name &>file
+
+# Redirect Stderr to Stdout
+$ program-name 2>&1
+
+# Change kernel Runtime Parameters
+sysctl -w net.ipv4.ip_forward=1
+sysctl -p
+
+# Compare and copy files that are not equal to another folder
+cp $(cmp nice /usr/bin/nice | awk '{print $2}') diff/
