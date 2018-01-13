@@ -1,6 +1,12 @@
 # Move line 90 to line 100 saving the output to a new file
 sed '90{h;d}; 100G' lines.txt > lines.txt_new
 
+# Using Vi
+# v = select chars, V = select entire line
+# d = cut, y = copy
+# P = paste before, p = paster after
+vi +<line_number> <file>
+
 # Append string to the end of the file
 echo line101 >> lines.txt_new
 
@@ -41,3 +47,23 @@ sysctl -p
 
 # Compare and copy files that are not equal to another folder
 cp $(cmp nice /usr/bin/nice | awk '{print $2}') diff/
+
+# Creating SwapFile
+dd if=/dev/zero of=/swapfile count=4096 bs=1MiB
+chmod 600 /swapfile
+mkswap /swapfile
+swapon /swapfile
+swapon -s
+free -m
+
+# Create Lvm Volume
+pvcreate /dev/sd[cd][12]
+vgcreate vg1 /dev/sd[cd][12]
+lvcreate -l 20 -n lv1 vg1
+
+# Create Mdm Volume
+mdadm --create /dev/md0 --level=1 --raid-devices=2 /dev/sd[cd]1
+mkfs -t ext4 /dev/md0
+blkid | grep md0 | awk '{print $2}' >> /etc/fstab
+
+
